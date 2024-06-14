@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "2db12566-afae-4ed1-9798-c4f19c736fce",
+		"name": "practice api testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35049327",
+		"_collection_link": "https://akash4-7401.postman.co/workspace/akash-Workspace~64938cee-75a5-477b-b6f9-f65cde3ce158/collection/35049327-2db12566-afae-4ed1-9798-c4f19c736fce?action=share&source=collection_link&creator=35049327"
+	},
+	"item": [
+		{
+			"name": "create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//No error found in the existing script\r",
+							"var jsondata=pm.response.json();\r",
+							"\r",
+							"pm.environment.set(\"id\", jsondata.bookingid);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var firstname=pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+							"console.log(firstname)\r",
+							"pm.environment.set(\"firstname\",firstname)\r",
+							"\r",
+							"\r",
+							"var lastName=pm.variables.replaceIn(\"{{$randomLastName}}\")\r",
+							"console.log(lastName)\r",
+							"pm.environment.set(\"lastname\",lastName)\r",
+							"\r",
+							"\r",
+							"const moment= require (\"moment\")\r",
+							"const today= moment()\r",
+							"var checkin= today.add (9,\"d\").format(\"YYYY-MM-DD\")\r",
+							"pm.environment.set(\"checkin\",checkin)\r",
+							"//console.log(today.add (5,\"d\").format(\"YYYY-MM-DD\"))\r",
+							"//var checkin= today.add(3, \"d\").format(\"YYYY-MM-DD\")\r",
+							"//pm.environment.set(\"checkin\",checkin)\r",
+							"\r",
+							"//var time=pm.variables.replaceIn(\"{{$randomDateFuture}}\")\r",
+							"//console.log(time)\r",
+							"\r",
+							"//const moment= require (\"moment\")\r",
+							"//const today1= moment()\r",
+							"var checkout= today.add (15,\"d\").format(\"YYYY-MM-DD\")\r",
+							"pm.environment.set(\"checkout\",checkout)\r",
+							"\r",
+							"var totalprice=pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(totalprice)\r",
+							"pm.environment.set(\"totalprice\",totalprice)\r",
+							"\r",
+							"// var depositpaid=pm.variables.replaceIn(\"{{$randomBool}}\")\r",
+							"// console.log(depositpaid)\r",
+							"// pm.environment.set(\"depositpaid\",depositpaid)\r",
+							"\r",
+							"var additionalneed=pm.variables.replaceIn(\"{{$randomLastName}}\")\r",
+							"console.log(additionalneed)\r",
+							"pm.environment.set(\"additionalneeds\",additionalneed)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n\t\"firstname\" : \"{{firstname}}\",\r\n\t\"lastname\" : \"{{lastname}}\",\r\n\t\"totalprice\" : \"{{totalprice}}\",\r\n\t\"depositpaid\" : true,\r\n\t\"bookingdates\" : {\r\n    \t\"checkin\" : \"{{checkin}}\",\r\n    \t\"checkout\" : \"{{checkout}}\"\r\n\t},\r\n\t\"additionalneeds\" : \"{{additionalneeds}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/booking/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"verification status code  \", function ()  {\r",
+							"  pm.response.to.have.status(200);   // Fixed status code\r",
+							"});\r",
+							"\r",
+							"pm.test(\"first name check  \", function ()  {\r",
+							"  var jsondata = pm.response.json(); // Added variable initialization for jsondata\r",
+							"  pm.expect(jsondata.firstname).to.eql(pm.environment.get(\"firstname\"));\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"last name check  \", function ()  {\r",
+							"  var jsondata = pm.response.json(); // Added variable initialization for jsondata\r",
+							"  pm.expect(jsondata.lastname).to.eql(pm.environment.get(\"lastname\"));\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"check in data check   \", function ()  {\r",
+							"  var jsondata = pm.response.json(); // Added variable initialization for jsondata\r",
+							"  pm.expect(jsondata.bookingdates.checkin).to.eql(pm.environment.get(\"checkin\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"check out data check   \", function ()  {\r",
+							"  var jsondata = pm.response.json(); // Added variable initialization for jsondata\r",
+							"  pm.expect(jsondata.bookingdates.checkout).to.eql(pm.environment.get(\"checkout\"));\r",
+							"});\r",
+							"\r",
+							"// pm.test(\"verify the price\", function ()  {\r",
+							"//   var jsondata = pm.response.json(); // Added variable initialization for jsondata\r",
+							"//   pm.expect(jsondata.totalprice).to.eql(Number(pm.environment.get(\"totalprice\"))); // Fixed reference error\r",
+							"// });\r",
+							"\r",
+							"pm.test(\"verify price check\", function ()  {\r",
+							"  var jsondata = pm.response.json(); // Added variable initialization for jsondata\r",
+							"  pm.expect(jsondata.totalprice.toString()).to.eql(pm.environment.get(\"totalprice\")); // Fixed reference error\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Check payment status \", function () {\r",
+							"    var jsondata = pm.response.json();\r",
+							"    pm.expect(jsondata.depositpaid).to.eql(true); // Fixed reference error\r",
+							"});\r",
+							"\r",
+							"pm.test(\"need check\", function ()  {\r",
+							"  var jsondata = pm.response.json(); // Added variable initialization for jsondata\r",
+							"  pm.expect(jsondata.additionalneeds).to.eql(pm.environment.get(\"additionalneeds\")); // Fixed reference error\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/booking/{{id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data=pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"acesstoken\", data.token)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"admin\",\r\n\t\"password\": \"password123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{acesstoken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstname\": \"Ahmed\",\r\n\t\"lastname\": \"Riha\",\r\n\t\"totalprice\": 1999,\r\n\t\"depositpaid\": true,\r\n\t\"bookingdates\": {\r\n    \t\"checkin\": \"2013-02-23\",\r\n    \t\"checkout\": \"2014-10-23\"\r\n\t},\r\n\t\"additionalneeds\": \"Breakfast\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/booking/{{id}}\n",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}\n"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
