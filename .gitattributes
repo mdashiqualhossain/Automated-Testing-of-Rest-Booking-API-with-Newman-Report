@@ -1,0 +1,5 @@
+*.csharp linguist-detectable=false  
+*.java linguist-detectable=ture  
+*.js linguist-detectable=ture  
+*.html linguist-detectable=ture  
+*.xml linguist-detectable=ture 
